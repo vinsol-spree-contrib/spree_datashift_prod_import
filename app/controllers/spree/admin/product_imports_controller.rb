@@ -1,4 +1,5 @@
 class Spree::Admin::ProductImportsController < Spree::Admin::BaseController
+  SAMPLE_CSV_FILE = Rails.root.join("sample_csv", "SpreeMultiVariant.csv")
 
   def index
     render
@@ -51,10 +52,8 @@ class Spree::Admin::ProductImportsController < Spree::Admin::BaseController
   end
 
   def sample_import
-    @imported = false
-    sample_file = Rails.root.join("sample_csv", "SpreeMultiVariant.csv")
-    if(File.exists? sample_file)
-      @csv_table = CSV.open(sample_file, :headers => true).read
+    if(File.exists? SAMPLE_CSV_FILE)
+      @csv_table = CSV.open(SAMPLE_CSV_FILE, :headers => true).read
       render
     else
       redirect_to admin_product_imports_path, flash: { error: "Sample Missing" }
@@ -62,6 +61,10 @@ class Spree::Admin::ProductImportsController < Spree::Admin::BaseController
   end
 
   def import
-    @imported = false
+    loader = DataShift::SpreeEcom::ProductLoader.new( nil, {:verbose => true})
+    opts = {}
+    opts[:mandatory] = ['sku', 'name', 'price']
+    loader.perform_load(SAMPLE_CSV_FILE, opts)
+    redirect_to admin_product_imports_path, flash: { notice: "Check Imported Data" }
   end
 end

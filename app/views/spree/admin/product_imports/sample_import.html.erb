@@ -1,5 +1,18 @@
 <h1>Sample Import</h1>
 
+<% if(Spree::Product.count > 0) %>
+  <h2>It seems you have product data already,
+  <%= link_to "Clear Product Related Data", reset_admin_product_imports_path %>
+  for better verification, After all Purpose is to check the capabilities and not test :P
+  </h2>
+<% end %>
+
+<br />
+
+<h4><%= link_to "Start Import", import_admin_product_imports_path, method: :post %></h4>
+
+<br />
+
 <table border="0" cellspacing="5" cellpadding="5">
   <tr>
   <% @csv_table.headers.each do |header| %>
