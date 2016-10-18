@@ -1,0 +1,16 @@
+<h1>Sample Import</h1>
+
+<table border="0" cellspacing="5" cellpadding="5">
+  <tr>
+  <% @csv_table.headers.each do |header| %>
+    <th><%= header %></th>
+  <% end %>
+  </tr>
+  <% @csv_table.each do |row| %>
+    <tr>
+    <% row.each do |element| %>
+      <td><%= element[1] %></td>
+    <% end %>
+    </tr>
+  <% end %> 
+</table>
