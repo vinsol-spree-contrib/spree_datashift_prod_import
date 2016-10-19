@@ -9,7 +9,17 @@
 
 <br />
 
-<h4><%= link_to "Start Import", import_admin_product_imports_path, method: :post %></h4>
+<%= link_to "Download Sample File", download_sample_csv_admin_product_imports_path %> and make edits and see customised Data :)
+
+<br />
+<br />
+
+<%= form_tag(user_csv_import_admin_product_imports_path, multipart: true) do %>
+  <%= file_field_tag :csv_file, accept: 'text/csv' %>
+  <%= submit_tag "Import" %>
+<% end %>
+
+<h4><%= link_to "Start Import with Sample File", sample_csv_import_admin_product_imports_path, method: :post %></h4>
 
 <br />
 
@@ -25,5 +35,5 @@
       <td><%= element[1] %></td>
     <% end %>
     </tr>
-  <% end %> 
+  <% end %>
 </table>
