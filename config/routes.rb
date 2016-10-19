@@ -4,7 +4,9 @@ Spree::Core::Engine.routes.draw do
       collection do
         get :reset
         get :sample_import
-        post :import
+        post :sample_csv_import
+        post :user_csv_import
+        get :download_sample_csv
       end
     end
   end

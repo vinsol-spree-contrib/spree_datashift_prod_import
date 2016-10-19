@@ -6,7 +6,8 @@ class Spree::Admin::ProductImportsController < Spree::Admin::BaseController
   end
 
   def reset
-    truncated_list = ['spree_products_taxons', 'spree_option_values_variants', 'spree_products_promotion_rules']
+    truncated_list = ['spree_products_taxons', 'spree_option_values_variants',
+                      'spree_products_promotion_rules', 'spree_product_option_types']
     result_log = []
     truncated_list.inject(result_log) do |r,t|
       c = "TRUNCATE #{t}"
@@ -60,11 +61,32 @@ class Spree::Admin::ProductImportsController < Spree::Admin::BaseController
     end
   end
 
-  def import
-    loader = DataShift::SpreeEcom::ProductLoader.new( nil, {:verbose => true})
+  def download_sample_csv
+    send_file SAMPLE_CSV_FILE
+  end
+
+  def sample_csv_import
     opts = {}
     opts[:mandatory] = ['sku', 'name', 'price']
+    loader = DataShift::SpreeEcom::ProductLoader.new( nil, {:verbose => true})
     loader.perform_load(SAMPLE_CSV_FILE, opts)
-    redirect_to admin_product_imports_path, flash: { notice: "Check Imported Data" }
+    redirect_to admin_product_imports_path, flash: { notice: "Check Sample Imported Data" }
+  end
+
+  def user_csv_import
+    opts = {}
+    opts[:mandatory] = ['sku', 'name', 'price']
+    loader = DataShift::SpreeEcom::ProductLoader.new( nil, {:verbose => true})
+    message = "Check Imported Data"
+    if params[:csv_file]
+      if params[:csv_file].respond_to?(:path)
+        loader.perform_load(params[:csv_file].path, opts)
+      else
+        message = "Please upload a valid file"
+      end
+    else
+      message = "No File Given"
+    end
+    redirect_to admin_product_imports_path, flash: { notice: message }
   end
 end
