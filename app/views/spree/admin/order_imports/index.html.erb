@@ -1,0 +1,9 @@
+<h1>Order Import Demo using <a href="https://github.com/vinsol-spree-contrib/datashift_spree/tree/0-2-stable" target="_blank">datashift_spree</a></h1>
+
+
+As its a demo, <%= link_to "Clear Order Related Data", reset_admin_order_imports_path %> to have blank slate
+and verify the data you get after <%= link_to "Sample Import", sample_import_admin_order_imports_path %>
+
+<br />
+<br />
+<%= link_to "Verify #{Spree::Order.count} Order(s)", admin_orders_path %> 
