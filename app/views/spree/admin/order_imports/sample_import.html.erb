@@ -1,0 +1,39 @@
+<h1>Sample Import</h1>
+
+<% if(Spree::Order.count > 0) %>
+  <h2>It seems you have orders already,
+  <%= link_to "Clear Order Related Data", reset_admin_order_imports_path %>
+  for better verification, After all Purpose is to check the capabilities and not test :P
+  </h2>
+<% end %>
+
+<br />
+
+<%= link_to "Download Sample File", download_sample_csv_admin_order_imports_path %> and make edits and see customised Data :)
+
+<br />
+<br />
+
+<%= form_tag(user_csv_import_admin_order_imports_path, multipart: true) do %>
+  <%= file_field_tag :csv_file, accept: 'text/csv' %>
+  <%= submit_tag "Import" %>
+<% end %>
+
+<h4><%= link_to "Start Import with Sample File", sample_csv_import_admin_order_imports_path, method: :post %></h4>
+
+<br />
+
+<table border="0" cellspacing="5" cellpadding="5">
+  <tr>
+  <% @csv_table.headers.each do |header| %>
+    <th><%= header %></th>
+  <% end %>
+  </tr>
+  <% @csv_table.each do |row| %>
+    <tr>
+    <% row.each do |element| %>
+      <td><%= element[1] %></td>
+    <% end %>
+    </tr>
+  <% end %>
+</table>

@@ -1,10 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'spree', github: 'spree/spree', branch: '3-0-stable'
-# Provides basic authentication functionality for testing parts of your engine
-gem 'spree_auth_devise', github: 'spree/spree_auth_devise', branch: '3-0-stable'
+gem 'spree', path: "~/spree/spree" # Change to your local path
 
-gem 'datashift', github: 'pikender/datashift', branch: '0-16-stable'
-gem 'datashift_spree', github: 'pikender/datashift_spree', branch: '0-2-stable'
+gem 'datashift', path: "~/spree/marketing/product-import/datashift" # Change to your local path
+gem 'datashift_spree', path: "~/spree/marketing/product-import/datashift_spree" # Change to your local path
 
 gemspec
