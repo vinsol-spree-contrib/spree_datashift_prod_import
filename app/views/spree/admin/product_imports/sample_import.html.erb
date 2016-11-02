@@ -7,6 +7,25 @@
   </h2>
 <% end %>
 
+
+<h2>Upload Shopify Product Export File and Get Import Compatible CSV to be used</h2>
+<%= link_to "Download Sample Shopify Export File", download_sample_shopify_export_csv_admin_product_imports_path %>
+
+<br/>
+
+try with your export file, if you have Shopify Account
+
+<br />
+
+<br/>
+<% if @shopify_upload_error %>
+  Error: <%= @shopify_upload_error %>
+<% end %>
+<%= form_tag(shopify_csv_import_admin_product_imports_path, multipart: true) do %>
+  <%= file_field_tag :csv_file, accept: 'text/csv' %>
+  <%= submit_tag "Import" %>
+<% end %>
+<br />
 <br />
 
 <%= link_to "Download Sample File", download_sample_csv_admin_product_imports_path %> and make edits and see customised Data :)
@@ -18,6 +37,9 @@
   <%= file_field_tag :csv_file, accept: 'text/csv' %>
   <%= submit_tag "Import" %>
 <% end %>
+
+<br />
+<br />
 
 <h4><%= link_to "Start Import with Sample File", sample_csv_import_admin_product_imports_path, method: :post %></h4>
 

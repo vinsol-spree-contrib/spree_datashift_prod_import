@@ -1,5 +1,6 @@
 class Spree::Admin::ProductImportsController < Spree::Admin::BaseController
   SAMPLE_CSV_FILE = Rails.root.join("sample_csv", "SpreeMultiVariant.csv")
+  SAMPLE_SHOPIFY_EXPORT_CSV_FILE = Rails.root.join("sample_csv", "shopify_products_export.csv")
 
   def index
     render
@@ -88,5 +89,30 @@ class Spree::Admin::ProductImportsController < Spree::Admin::BaseController
       message = "No File Given"
     end
     redirect_to admin_product_imports_path, flash: { notice: message }
+  end
+
+  def download_sample_shopify_export_csv
+    send_file SAMPLE_SHOPIFY_EXPORT_CSV_FILE
+  end
+
+  def shopify_csv_import
+    res = nil
+    if params[:csv_file]
+      if params[:csv_file].respond_to?(:path)
+        tranform_obj = DataShift::SpreeEcom::ShopifyProductTransform.new(params[:csv_file].path)
+        res = tranform_obj.to_csv
+      else
+        message = "Please upload a valid file"
+      end
+    else
+      message = "No File Given"
+    end
+    if res
+      send_data res,
+          :type => 'text/csv; charset=iso-8859-1; header=present',
+            :disposition => "attachment; filename=upload_for_products.csv"
+    else
+      redirect_to sample_import_admin_product_imports_path, flash: { notice: message }
+    end
   end
 end
