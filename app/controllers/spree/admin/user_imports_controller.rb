@@ -2,6 +2,10 @@ class Spree::Admin::UserImportsController < Spree::Admin::BaseController
   SAMPLE_CSV_FILE = Rails.root.join("sample_csv", "customers_export.csv")
 
   def index
+    admin_role = Spree::Role.where(name: 'admin').first
+    admin_user_ids = admin_role.users.pluck(:id)
+    @admin_user_count = Spree::User.where('id NOT IN (?)', admin_user_ids).count
+
     render
   end
 
