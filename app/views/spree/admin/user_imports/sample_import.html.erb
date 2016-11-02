@@ -1,0 +1,73 @@
+<h1>Sample Import</h1>
+
+<% if(@admin_user_count > 0) %>
+  <h2>It seems you have Non Admin users already,
+  <%= link_to "Clear User Related Data", reset_admin_user_imports_path %>
+  for better verification, After all Purpose is to check the capabilities and not test :P
+  </h2>
+<% end %>
+
+<br />
+
+<%= link_to "Download Sample File", download_sample_csv_admin_user_imports_path %> and make edits and see customised Data :)
+
+<br />
+<br />
+
+<p>
+<b>If you have different csv's for Bill and Ship Addresses for user</b>
+<br />
+make sure, both have proper email column to identify user
+
+<br />
+<b>If you have same csv file with different columns for Bill and Ship Address</b>
+<br />
+Import would be done in 2 phases
+
+<br />
+Ship Address and Bill Address can be uploaded in any order,
+<br />
+For simplicity lets assume User is uploaded with ship address first and then with bill address
+
+<br />
+1. Copy the csv file, now you have 2 csv files with same content
+<br />
+1.1. Rename the csv to easily identify the Ship Address ones and Bill Address ones
+<br />
+2. Make sure column headers for respective data are as downloaded in sample csv
+<br />
+3. Select approriate option with uploaded csv from ship/bill address
+<br />
+4. Confirm !!!
+<br />
+</p>
+
+<%= form_tag(user_csv_import_admin_user_imports_path, multipart: true) do %>
+  <%= file_field_tag :csv_file, accept: 'text/csv' %>
+  <%= label_tag 'Address Type', 'Ship Address' %>
+  <%= radio_button_tag 'address_type', 'ship_address' %>
+  <br />
+  <%= label_tag 'Address Type', 'Bill Address' %>
+  <%= radio_button_tag 'address_type', 'bill_address' %>
+  <br />
+  <%= submit_tag "Import" %>
+<% end %>
+
+<h4><%= link_to "Start Import with Sample File", sample_csv_import_admin_user_imports_path, method: :post %></h4>
+
+<br />
+
+<table border="0" cellspacing="5" cellpadding="5">
+  <tr>
+  <% @csv_table.headers.each do |header| %>
+    <th><%= header %></th>
+  <% end %>
+  </tr>
+  <% @csv_table.each do |row| %>
+    <tr>
+    <% row.each do |element| %>
+      <td><%= element[1] %></td>
+    <% end %>
+    </tr>
+  <% end %>
+</table>
