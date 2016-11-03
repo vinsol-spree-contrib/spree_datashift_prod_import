@@ -6,6 +6,9 @@ and verify the data you get after <%= link_to "Sample Import", sample_import_adm
 
 <br />
 <br />
+<%= link_to "Verify #{Spree::Product.count} Products and their Variants, Images,Stocks, Properties", admin_products_path %>
+<br />
+<br />
 <%= link_to "Verify Option Types", admin_option_types_path %>
 <br />
 <%= link_to "Verify Option Values", admin_option_types_path %>
@@ -15,8 +18,6 @@ and verify the data you get after <%= link_to "Sample Import", sample_import_adm
 <%= link_to "Verify Tax Categories", admin_tax_categories_path %>
 <br />
 <%= link_to "Verify Stock Movements", admin_stock_locations_path %>
-<br />
-<%= link_to "Verify Products and their Variants, Images,Stocks, Properties", admin_products_path %>
 <br />
 <%= link_to "Verify Product Properties", admin_properties_path %>
 <br />
