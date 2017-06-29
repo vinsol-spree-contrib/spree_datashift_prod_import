@@ -1,63 +1,67 @@
 class Spree::Admin::UserImportsController < Spree::Admin::BaseController
-  SAMPLE_CSV_FILE = Rails.root.join("sample_csv", "customers_export.csv")
+
+  before_action :ensure_sample_file_exists, only: [:download_sample_csv, :sample_csv_import]
+  before_action :fetch_non_admins, only: [:index, :sample_import, :reset]
+  before_action :ensure_valid_file, only: :user_csv_import
 
   def index
-    admin_role = Spree::Role.where(name: 'admin').first
-    admin_user_ids = admin_role.users.pluck(:id)
-    @admin_user_count = Spree::User.where('id NOT IN (?)', admin_user_ids).count
-
-    render
+    @csv_table = CSV.open(SAMPLE_CSV_FILES[:sample_user_file], headers: true).read if File.exists? SAMPLE_CSV_FILES[:sample_user_file]
   end
 
   def reset
-    result_log = []
-
-    admin_role = Spree::Role.where(name: 'admin').first
-    admin_user_ids = admin_role.users.pluck(:id)
-    Spree::User.where('id NOT IN (?)', admin_user_ids).destroy_all.each do |u|
-      result_log << u.login
-    end
-
-    redirect_to admin_user_imports_path, flash: {notice: result_log.join("---,---")}
+    Spree::DataResetService.new.reset_users(@non_admins)
+    flash[:success] = Spree.t(:users, scope: :reset_message)
+    redirect_to admin_user_imports_path
   end
 
   def sample_import
-    admin_role = Spree::Role.where(name: 'admin').first
-    admin_user_ids = admin_role.users.pluck(:id)
-    @admin_user_count = Spree::User.where('id NOT IN (?)', admin_user_ids).count
-
-    if(File.exists? SAMPLE_CSV_FILE)
-      @csv_table = CSV.open(SAMPLE_CSV_FILE, :headers => true).read
-      render
-    else
-      redirect_to admin_user_imports_path, flash: { error: "Sample Missing" }
-    end
   end
 
   def download_sample_csv
-    send_file SAMPLE_CSV_FILE
+    send_file SAMPLE_CSV_FILES[:sample_user_file]
   end
 
   def sample_csv_import
-    opts = {}
-    loader = DataShift::SpreeEcom::ShopifyCustomerLoader.new( nil, {:verbose => true})
-    loader.perform_load(SAMPLE_CSV_FILE, opts)
-    redirect_to admin_user_imports_path, flash: { notice: "Check Sample Imported Data" }
+    begin
+      loader = DataShift::SpreeEcom::ShopifyCustomerLoader.new(nil, { verbose: true, address_type: params[:address_type] })
+      loader.perform_load(SAMPLE_CSV_FILES[:sample_user_file])
+      flash[:success] = Spree.t(:successfull_import, resource: 'Users')
+    rescue => e
+      flash[:error] = e.message
+    end
+    redirect_to admin_user_imports_path
   end
 
   def user_csv_import
-    opts = {}
-    loader = DataShift::SpreeEcom::ShopifyCustomerLoader.new( nil, {:verbose => true, :address_type => params[:address_type]})
-    message = "Check Imported Data"
-    if params[:csv_file]
-      if params[:csv_file].respond_to?(:path)
-        loader.perform_load(params[:csv_file].path, opts)
-      else
-        message = "Please upload a valid file"
-      end
-    else
-      message = "No File Given"
+    begin
+      loader = DataShift::SpreeEcom::ShopifyCustomerLoader.new(nil, { verbose: true, address_type: params[:address_type] })
+      loader.perform_load(params[:csv_file].path)
+      flash[:success] = Spree.t(:successfull_import, resource: 'users')
+    rescue => e
+      flash[:error] = e.message
     end
-    redirect_to admin_user_imports_path, flash: { notice: message }
+    redirect_to admin_user_imports_path
   end
+
+  private
+
+    def ensure_valid_file
+      unless params[:csv_file].try(:respond_to?, :path)
+        flash[:error] = Spree.t(:file_invalid_error)
+        redirect_to admin_user_imports_path
+      end
+    end
+
+    def ensure_sample_file_exists
+      unless File.exists? SAMPLE_CSV_FILES[:sample_user_file]
+        flash[:error] = Spree.t(:sample_file_not_present)
+        redirect_to admin_user_imports_path
+      end
+    end
+
+    def fetch_non_admins
+      @non_admins = Spree::User.non_admins
+      @non_admin_user_count = @non_admins.count
+    end
+
 end

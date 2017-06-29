@@ -1,9 +1,21 @@
-<h1>Order Import Demo using <a href="https://github.com/vinsol-spree-contrib/datashift_spree/tree/0-2-stable" target="_blank">datashift_spree</a></h1>
+<% content_for :page_title do %>
+  <%= Spree.t(:order_import, scope: [:import_headings, :order_import_headings]) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:clear_orders, scope: [:import_headings, :order_import_headings]), reset_admin_order_imports_path, { class: "btn-success", icon: 'trash', method: :delete, data: { confirm: Spree.t(:order_reset_confirmation, scope: [:import_headings, :order_import_headings]) } } %>
+  <%= button_link_to Spree.t(:import_orders, scope: [:import_headings, :order_import_headings]), sample_import_admin_order_imports_path, { class: "btn-success", icon: 'add' } %>
+<% end %>
+
+<div>
+  <strong>Note - </strong>In development mode, For better verifcation we recommend you to first <%= link_to Spree.t(:clear_order_data, scope: [:import_headings, :order_import_headings]), reset_admin_order_imports_path, method: :delete, data: { confirm: Spree.t(:order_reset_confirmation, scope: [:import_headings, :order_import_headings]) } %> and then try to <%= link_to Spree.t(:import_orders, scope: [:import_headings, :order_import_headings]), sample_import_admin_order_imports_path %>.
+</div>
+
+<br><br>
+<%= link_to Spree.t(:verify_orders, scope: [:import_headings, :order_import_headings], order_count: Spree::Order.count), admin_orders_path %>
 
 
-As its a demo, <%= link_to "Clear Order Related Data", reset_admin_order_imports_path %> to have blank slate
-and verify the data you get after <%= link_to "Sample Import", sample_import_admin_order_imports_path %>
-
-<br />
-<br />
-<%= link_to "Verify #{Spree::Order.count} Order(s)", admin_orders_path %> 
+<% if @csv_table %>
+  <h3 class="text-center">Sample CSV Data</h3>
+  <%= render 'spree/admin/shared/sample_csv_data', csv_table: @csv_table %>
+<% end %>

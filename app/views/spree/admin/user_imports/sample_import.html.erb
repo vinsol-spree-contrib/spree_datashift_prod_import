@@ -1,73 +1,43 @@
-<h1>Sample Import</h1>
-
-<% if(@admin_user_count > 0) %>
-  <h2>It seems you have Non Admin users already,
-  <%= link_to "Clear User Related Data", reset_admin_user_imports_path %>
-  for better verification, After all Purpose is to check the capabilities and not test :P
-  </h2>
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:user_import, scope: [:import_headings, :user_import_headings]), admin_user_imports_url %> /
+  <%= Spree.t(:import) %>
 <% end %>
 
-<br />
-
-<%= link_to "Download Sample File", download_sample_csv_admin_user_imports_path %> and make edits and see customised Data :)
-
-<br />
-<br />
-
-<p>
-<b>If you have different csv's for Bill and Ship Addresses for user</b>
-<br />
-make sure, both have proper email column to identify user
-
-<br />
-<b>If you have same csv file with different columns for Bill and Ship Address</b>
-<br />
-Import would be done in 2 phases
-
-<br />
-Ship Address and Bill Address can be uploaded in any order,
-<br />
-For simplicity lets assume User is uploaded with ship address first and then with bill address
-
-<br />
-1. Copy the csv file, now you have 2 csv files with same content
-<br />
-1.1. Rename the csv to easily identify the Ship Address ones and Bill Address ones
-<br />
-2. Make sure column headers for respective data are as downloaded in sample csv
-<br />
-3. Select approriate option with uploaded csv from ship/bill address
-<br />
-4. Confirm !!!
-<br />
-</p>
-
-<%= form_tag(user_csv_import_admin_user_imports_path, multipart: true) do %>
-  <%= file_field_tag :csv_file, accept: 'text/csv' %>
-  <%= label_tag 'Address Type', 'Ship Address' %>
-  <%= radio_button_tag 'address_type', 'ship_address' %>
-  <br />
-  <%= label_tag 'Address Type', 'Bill Address' %>
-  <%= radio_button_tag 'address_type', 'bill_address' %>
-  <br />
-  <%= submit_tag "Import" %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:downlaod_sample_file), download_sample_csv_admin_user_imports_path, { class: "btn-success", icon: 'download-alt' } %>
 <% end %>
 
-<h4><%= link_to "Start Import with Sample File", sample_csv_import_admin_user_imports_path, method: :post %></h4>
+<% if(@non_admin_user_count > 0) %>
+  <div class="row">
+    <strong>Note - </strong>In development mode, For better verifcation we recommend you to first <%= link_to Spree.t(:clear_user_data, scope: [:import_headings, :user_import_headings]), reset_admin_user_imports_path, method: :delete, data: { confirm: Spree.t(:user_reset_confirmation, scope: [:import_headings, :user_import_headings]) } %> and then try to <%= link_to Spree.t(:import_users, scope: [:import_headings, :user_import_headings]), sample_import_admin_user_imports_path %>.
+  </div>
+<% end %>
 
-<br />
+<div class="row">
+  <h3>Instructions</h3>
+  <div class='top-pading-20'>a) If you are importing using CSV file</div>
+  <%= render 'import_form' %>
 
-<table border="0" cellspacing="5" cellpadding="5">
-  <tr>
-  <% @csv_table.headers.each do |header| %>
-    <th><%= header %></th>
-  <% end %>
-  </tr>
-  <% @csv_table.each do |row| %>
-    <tr>
-    <% row.each do |element| %>
-      <td><%= element[1] %></td>
-    <% end %>
-    </tr>
-  <% end %>
-</table>
+  <div class='top-pading-20'>b) If you are importing using sample data. </div>
+  <ol>
+    <li>Click on 'Import with Sample data using bill_address' if you want to import sample data and use address as bill_address.</li>
+    <li>Click on 'Import with Sample data using ship_address' if you want to import sample data and use address as ship_address.</li>
+    <li>You can also download the sample file and customized it according to your need and upload it again using first step</li>
+    <br>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Sample Import</div>
+          <div class="panel-body">
+            <div>
+              <%= link_to Spree.t(:import_with_bill_address, scope: [:import_headings, :user_import_headings]), sample_csv_import_admin_user_imports_path(address_type: :bill_address), method: :post, data: { confirm: Spree.t(:are_you_sure) }, class: 'btn btn-default' %>
+            </div><br>
+            <div>
+              <%= link_to Spree.t(:import_with_ship_address, scope: [:import_headings, :user_import_headings]), sample_csv_import_admin_user_imports_path(address_type: :ship_address), method: :post, data: { confirm: Spree.t(:are_you_sure) }, class: 'btn btn-default' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ol>
+</div>

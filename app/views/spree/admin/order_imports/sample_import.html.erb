@@ -1,39 +1,40 @@
-<h1>Sample Import</h1>
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:order_import, scope: [:import_headings, :order_import_headings]), admin_order_imports_url %> /
+  <%= Spree.t(:import) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:downlaod_sample_file), download_sample_csv_admin_order_imports_path, { class: "btn-success", icon: 'download-alt' } %>
+<% end %>
+
 
 <% if(Spree::Order.count > 0) %>
-  <h2>It seems you have orders already,
-  <%= link_to "Clear Order Related Data", reset_admin_order_imports_path %>
-  for better verification, After all Purpose is to check the capabilities and not test :P
-  </h2>
+  <div class="row">
+    <strong>Note - </strong>In development mode, For better verifcation we recommend you to first <%= link_to Spree.t(:clear_order_data, scope: [:import_headings, :order_import_headings]), reset_admin_order_imports_path, method: :delete, data: { confirm: Spree.t(:order_reset_confirmation, scope: [:import_headings, :order_import_headings]) } %> and then try to <%= link_to Spree.t(:import_orders, scope: [:import_headings, :order_import_headings]), sample_import_admin_order_imports_path %>.
+  </div>
 <% end %>
 
-<br />
+<div class="row">
+  <h3>Instructions</h3>
+  <div class='top-pading-20'>a) If you are importing using CSV file</div>
+  <%= render 'import_form' %>
 
-<%= link_to "Download Sample File", download_sample_csv_admin_order_imports_path %> and make edits and see customised Data :)
-
-<br />
-<br />
-
-<%= form_tag(user_csv_import_admin_order_imports_path, multipart: true) do %>
-  <%= file_field_tag :csv_file, accept: 'text/csv' %>
-  <%= submit_tag "Import" %>
-<% end %>
-
-<h4><%= link_to "Start Import with Sample File", sample_csv_import_admin_order_imports_path, method: :post %></h4>
-
-<br />
-
-<table border="0" cellspacing="5" cellpadding="5">
-  <tr>
-  <% @csv_table.headers.each do |header| %>
-    <th><%= header %></th>
-  <% end %>
-  </tr>
-  <% @csv_table.each do |row| %>
-    <tr>
-    <% row.each do |element| %>
-      <td><%= element[1] %></td>
-    <% end %>
-    </tr>
-  <% end %>
-</table>
+  <div class='top-pading-20'>b) If you are importing using sample data. </div>
+  <ol>
+    <li>Click on 'Import with Sample data' and verify the imported data</li>
+    <li>You can also download the sample file and customized it according to your need and upload it again using first step</li>
+    <br>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Sample Import</div>
+          <div class="panel-body">
+            <div>
+              <%= link_to Spree.t(:import_with_sample_data, scope: [:import_headings, :order_import_headings]), sample_csv_import_admin_order_imports_path, method: :post, data: { confirm: Spree.t(:are_you_sure) }, class: 'btn btn-default' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ol>
+</div>

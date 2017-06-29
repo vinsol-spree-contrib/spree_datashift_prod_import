@@ -1,52 +1,60 @@
 class Spree::Admin::OrderImportsController < Spree::Admin::BaseController
-  SAMPLE_CSV_FILE = Rails.root.join("sample_csv", "orders_export_multiple_paid-fulfilled.csv")
+
+  before_action :ensure_sample_file_exists, only: [:download_sample_csv, :sample_csv_import]
+  before_action :ensure_valid_file, only: :user_csv_import
 
   def index
-    render
+    @csv_table = CSV.open(SAMPLE_CSV_FILES[:sample_order_file], headers: true).read if File.exists? SAMPLE_CSV_FILES[:sample_order_file]
   end
 
   def reset
-    result_log = []
-    Spree::Order.destroy_all.each do |o|
-      result_log << o.number
-    end
-
-    redirect_to admin_order_imports_path, flash: {notice: result_log.join("---,---")}
+    flash[:success] = Spree.t(:orders, scope: :reset_message, order_numbers: Spree::DataResetService.new.reset_orders)
+    redirect_to admin_order_imports_path
   end
 
   def sample_import
-    if(File.exists? SAMPLE_CSV_FILE)
-      @csv_table = CSV.open(SAMPLE_CSV_FILE, :headers => true).read
-      render
-    else
-      redirect_to admin_order_imports_path, flash: { error: "Sample Missing" }
-    end
   end
 
   def download_sample_csv
-    send_file SAMPLE_CSV_FILE
+    send_file SAMPLE_CSV_FILES[:sample_order_file]
   end
 
   def sample_csv_import
-    opts = {}
-    loader = DataShift::SpreeEcom::ShopifyOrderLoader.new( Spree::Order, {:verbose => true})
-    loader.perform_load(SAMPLE_CSV_FILE, opts)
-    redirect_to admin_order_imports_path, flash: { notice: "Check Sample Imported Data" }
+    begin
+      loader = DataShift::SpreeEcom::ShopifyOrderLoader.new(Spree::Order, { verbose: true })
+      loader.perform_load(SAMPLE_CSV_FILES[:sample_order_file])
+      flash[:success] = Spree.t(:successfull_import, resource: 'Orders')
+    rescue => e
+      flash[:error] = e.message
+    end
+    redirect_to admin_order_imports_path
   end
 
   def user_csv_import
-    opts = {}
-    loader = DataShift::SpreeEcom::ShopifyOrderLoader.new( Spree::Order, {:verbose => true})
-    message = "Check Imported Data"
-    if params[:csv_file]
-      if params[:csv_file].respond_to?(:path)
-        loader.perform_load(params[:csv_file].path, opts)
-      else
-        message = "Please upload a valid file"
-      end
-    else
-      message = "No File Given"
+    begin
+      loader = DataShift::SpreeEcom::ShopifyOrderLoader.new(Spree::Order, { verbose: true })
+      loader.perform_load(params[:csv_file].path)
+      flash[:success] = Spree.t(:successfull_import, resource: 'Orders')
+    rescue => e
+      flash[:error] = e.message
     end
-    redirect_to admin_order_imports_path, flash: { notice: message }
+    redirect_to admin_order_imports_path
   end
+
+  private
+
+    def ensure_valid_file
+      unless params[:csv_file].try(:respond_to?, :path)
+        flash[:error] = Spree.t(:file_invalid_error)
+        redirect_to admin_order_imports_path
+      end
+    end
+
+    def ensure_sample_file_exists
+      unless File.exists? SAMPLE_CSV_FILES[:sample_order_file]
+        flash[:error] = Spree.t(:sample_file_not_present)
+        redirect_to admin_order_imports_path
+      end
+    end
+
 end
