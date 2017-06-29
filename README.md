@@ -1,23 +1,66 @@
 SpreeDatashiftProdImport
 ========================
 
-Introduction goes here.
+This spree extension allows admin to import Products, Variants, Users, Orders etc using a CSV or .xls file including all associations.
 
 Installation
 ------------
 
-Add spree_datashift_prod_import to your Gemfile:
+1. Add following to your Gemfile:
 
-```ruby
-gem 'spree_datashift_prod_import'
-```
+  ```ruby
+  gem 'spree_datashift_prod_import', github: 'vinsol-spree-contrib/spree_datashift_prod_import', branch: <spree-version-compatible>
+  gem 'datashift_spree', github: 'vinsol-spree-contrib/datashift_spree', branch: 'bug-fixes'
+  gem 'datashift', github: 'vinsol-spree-contrib/datashift', branch: '0-16-stable'
+  ```
+  *The `branch` option is important:* it must match the version of Spree you're using. For example, use `3-1-stable` if you're using Spree `3-1-stable` or any `3.1.x` version.
 
-Bundle your dependencies and run the installation generator:
+2. Install the gem using Bundler:
 
-```shell
-bundle
-bundle exec rails g spree_datashift_prod_import:install
-```
+  ```ruby
+  bundle install
+  ```
+
+3. Copy & run migrations
+
+  ```ruby
+  bundle exec rails g spree_datashift_prod_import:install
+  ```
+
+4. Create a folder with name `sample_csv` in your app's root directory and add sample files in it.
+
+5. Restart your server.
+
+Features
+--------
+
+1. Import
+  - Allows importing of Products, Variants, Taxons, Orders, Shipping Categories, Stock Locations, Users and their Addresses etc.
+
+2. Transform
+  - Allows easy transformation of Shopify Products data into Spree Models.
+
+3. Reset Data
+  - Allows admin to clear all Products, Variants, Images, Orders, Users, Shipping Categories etc from the system.
+    - *Note It is recommended only if you want to build the system from scratch as you would loose all your data related to the application.
+
+Working
+-------
+
+1. For Importing Users.
+  - Go to Admin >> Imports >> Users
+  - Click on `Import Users` button.
+  - Now either upload your own CSV file having the headers in the format present in sample file or start importing with the sample data.
+
+2. For Importing Products.
+  - Go to Admin >> Imports >> Products
+  - Click on `Import Products` button.
+  - Now either upload your own CSV file having the headers in the format present in sample file or start importing with the sample data.
+
+3. For Importing Users.
+  - Go to Admin >> Imports >> Orders
+  - Click on `Import Orders` button.
+  - Now either upload your own CSV file having the headers in the format present in sample file or start importing with the sample data.
 
 Testing
 -------
@@ -36,4 +79,9 @@ Simply add this require statement to your spec_helper:
 require 'spree_datashift_prod_import/factories'
 ```
 
-Copyright (c) 2016 [name of extension creator], released under the New BSD License
+Credits
+-------
+
+[![vinsol.com: Ruby on Rails, iOS and Android developers](http://vinsol.com/vin_logo.png "Ruby on Rails, iOS and Android developers")](http://vinsol.com)
+
+Copyright (c) 2014 [vinsol.com](http://vinsol.com "Ruby on Rails, iOS and Android developers"), released under the New MIT License
