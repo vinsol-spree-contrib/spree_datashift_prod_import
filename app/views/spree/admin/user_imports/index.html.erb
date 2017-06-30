@@ -1,18 +1,18 @@
 <% content_for :page_title do %>
-  <%= Spree.t(:user_import, scope: [:import_headings, :user_import_headings]) %>
+  <%= Spree.t(:user_import, scope: [:datashift_import, :import_headings, :user_import_headings]) %>
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:clear_users, scope: [:import_headings, :user_import_headings]), reset_admin_user_imports_path, { class: "btn-success", icon: 'trash', method: :delete, data: { confirm: Spree.t(:user_reset_confirmation, scope: [:import_headings, :user_import_headings]) } } %>
-  <%= button_link_to Spree.t(:import_users, scope: [:import_headings, :user_import_headings]), sample_import_admin_user_imports_path, { class: "btn-success", icon: 'add' } %>
+  <%= button_link_to Spree.t(:clear_users, scope: [:datashift_import, :import_headings, :user_import_headings]), reset_admin_user_imports_path, { class: "btn-success", icon: 'trash', method: :delete, data: { confirm: Spree.t(:user_reset_confirmation, scope: [:datashift_import, :import_headings, :user_import_headings]) } } %>
+  <%= button_link_to Spree.t(:import_users, scope: [:datashift_import, :import_headings, :user_import_headings]), sample_import_admin_user_imports_path, { class: "btn-success", icon: 'add' } %>
 <% end %>
 
-<div><strong>Note - </strong>In development mode, For better verifcation we recommend you to first <%= link_to Spree.t(:clear_user_data, scope: [:import_headings, :user_import_headings]), reset_admin_user_imports_path, data: { confirm: Spree.t(:user_reset_confirmation, scope: [:import_headings, :user_import_headings]) }, method: :delete %> and then try to <%= link_to Spree.t(:import_users, scope: [:import_headings, :user_import_headings]), sample_import_admin_user_imports_path %>.</div>
+<div><strong>Note - </strong>In development mode, For better verifcation we recommend you to first <%= link_to Spree.t(:clear_user_data, scope: [:datashift_import, :import_headings, :user_import_headings]), reset_admin_user_imports_path, data: { confirm: Spree.t(:user_reset_confirmation, scope: [:datashift_import, :import_headings, :user_import_headings]) }, method: :delete %> and then try to <%= link_to Spree.t(:import_users, scope: [:datashift_import, :import_headings, :user_import_headings]), sample_import_admin_user_imports_path %>.</div>
 
 <br>
 <br>
 <% if @non_admins.exists? %>
-  <%= link_to Spree.t(:verify_non_admins, scope: [:import_headings, :user_import_headings], non_admin_count: @non_admin_user_count), admin_users_path %>
+  <%= link_to Spree.t(:verify_non_admins, scope: [:datashift_import, :import_headings, :user_import_headings], non_admin_count: @non_admin_user_count), admin_users_path %>
 <% end %>
 
 <% if @csv_table %>

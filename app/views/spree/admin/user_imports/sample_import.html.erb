@@ -1,15 +1,15 @@
 <% content_for :page_title do %>
-  <%= link_to Spree.t(:user_import, scope: [:import_headings, :user_import_headings]), admin_user_imports_url %> /
-  <%= Spree.t(:import) %>
+  <%= link_to Spree.t(:user_import, scope: [:datashift_import, :import_headings, :user_import_headings]), admin_user_imports_url %> /
+  <%= Spree.t(:import, scope: :datashift_import) %>
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:downlaod_sample_file), download_sample_csv_admin_user_imports_path, { class: "btn-success", icon: 'download-alt' } %>
+  <%= button_link_to Spree.t(:downlaod_sample_file, scope: :datashift_import), download_sample_csv_admin_user_imports_path, { class: "btn-success", icon: 'download-alt' } %>
 <% end %>
 
 <% if(@non_admin_user_count > 0) %>
   <div class="row">
-    <strong>Note - </strong>In development mode, For better verifcation we recommend you to first <%= link_to Spree.t(:clear_user_data, scope: [:import_headings, :user_import_headings]), reset_admin_user_imports_path, method: :delete, data: { confirm: Spree.t(:user_reset_confirmation, scope: [:import_headings, :user_import_headings]) } %> and then try to <%= link_to Spree.t(:import_users, scope: [:import_headings, :user_import_headings]), sample_import_admin_user_imports_path %>.
+    <strong>Note - </strong>In development mode, For better verifcation we recommend you to first <%= link_to Spree.t(:clear_user_data, scope: [:datashift_import, :import_headings, :user_import_headings]), reset_admin_user_imports_path, method: :delete, data: { confirm: Spree.t(:user_reset_confirmation, scope: [:datashift_import, :import_headings, :user_import_headings]) } %> and then try to <%= link_to Spree.t(:import_users, scope: [:datashift_import, :import_headings, :user_import_headings]), sample_import_admin_user_imports_path %>.
   </div>
 <% end %>
 
@@ -30,10 +30,10 @@
           <div class="panel-heading">Sample Import</div>
           <div class="panel-body">
             <div>
-              <%= link_to Spree.t(:import_with_bill_address, scope: [:import_headings, :user_import_headings]), sample_csv_import_admin_user_imports_path(address_type: :bill_address), method: :post, data: { confirm: Spree.t(:are_you_sure) }, class: 'btn btn-default' %>
+              <%= link_to Spree.t(:import_with_bill_address, scope: [:datashift_import, :import_headings, :user_import_headings]), sample_csv_import_admin_user_imports_path(address_type: :bill_address), method: :post, data: { confirm: Spree.t(:are_you_sure) }, class: 'btn btn-default' %>
             </div><br>
             <div>
-              <%= link_to Spree.t(:import_with_ship_address, scope: [:import_headings, :user_import_headings]), sample_csv_import_admin_user_imports_path(address_type: :ship_address), method: :post, data: { confirm: Spree.t(:are_you_sure) }, class: 'btn btn-default' %>
+              <%= link_to Spree.t(:import_with_ship_address, scope: [:datashift_import, :import_headings, :user_import_headings]), sample_csv_import_admin_user_imports_path(address_type: :ship_address), method: :post, data: { confirm: Spree.t(:are_you_sure) }, class: 'btn btn-default' %>
             </div>
           </div>
         </div>

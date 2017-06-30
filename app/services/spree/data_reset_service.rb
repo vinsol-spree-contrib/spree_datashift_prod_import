@@ -2,7 +2,7 @@ module Spree
   class DataResetService
 
     def reset_users(users = [])
-      users = Spree::User.non_admins.all unless users.present?
+      users = Spree::User.non_admins unless users.present?
       users.destroy_all
     end
 
@@ -15,7 +15,7 @@ module Spree
       model_list = PRODUCT_DEPENDENT_MODELS
       result_log = model_list.map do |model|
         klass = DataShift::SpreeEcom.get_spree_class(model)
-        klass ? clear_model(klass) : Spree.t(:model_not_found, model: model)
+        klass ? clear_model(klass) : Spree.t(:model_not_found, scope: :datashift_import, model: model)
       end
       result_log.join(', ')
     end
@@ -24,9 +24,9 @@ module Spree
       def clear_model(klass)
         begin
           klass.destroy_all
-          Spree.t(:model_reset_successfully, model: klass.name.demodulize)
+          Spree.t(:model_reset_successfully, scope: :datashift_import, model: klass.name.demodulize)
         rescue => e
-          Spree.t(:records_not_deleted, model: klass.name.demodulize, error: e.message)
+          Spree.t(:records_not_deleted, scope: :datashift_import, model: klass.name.demodulize, error: e.message)
         end
       end
   end

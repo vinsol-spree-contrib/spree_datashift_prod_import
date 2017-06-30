@@ -1,4 +1,4 @@
-SAMPLE_CSV_FILES = {
+DATASHIFT_CSV_FILES = {
   sample_product_file: Rails.root.join("sample_csv", "SpreeMultiVariant.csv"),
   shopify_products_export_file: Rails.root.join("sample_csv", "shopify_products_export.csv"),
   sample_user_file: Rails.root.join("sample_csv", "customers_export.csv"),
