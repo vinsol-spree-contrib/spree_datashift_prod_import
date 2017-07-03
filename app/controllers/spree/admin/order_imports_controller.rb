@@ -1,10 +1,9 @@
 class Spree::Admin::OrderImportsController < Spree::Admin::BaseController
 
-  before_action :ensure_sample_file_exists, only: [:download_sample_csv, :sample_csv_import]
   before_action :ensure_valid_file, only: :user_csv_import
 
   def index
-    @csv_table = CSV.open(DATASHIFT_CSV_FILES[:sample_order_file], headers: true).read if File.exists? DATASHIFT_CSV_FILES[:sample_order_file]
+    @csv_table = CSV.open(DATASHIFT_CSV_FILES[:sample_order_file], headers: true).read
   end
 
   def reset
@@ -46,13 +45,6 @@ class Spree::Admin::OrderImportsController < Spree::Admin::BaseController
     def ensure_valid_file
       unless params[:csv_file].try(:respond_to?, :path)
         flash[:error] = Spree.t(:file_invalid_error, scope: :datashift_import)
-        redirect_to admin_order_imports_path
-      end
-    end
-
-    def ensure_sample_file_exists
-      unless File.exists? DATASHIFT_CSV_FILES[:sample_order_file]
-        flash[:error] = Spree.t(:sample_file_not_present, scope: :datashift_import)
         redirect_to admin_order_imports_path
       end
     end

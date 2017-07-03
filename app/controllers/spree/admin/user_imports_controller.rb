@@ -1,11 +1,10 @@
 class Spree::Admin::UserImportsController < Spree::Admin::BaseController
 
-  before_action :ensure_sample_file_exists, only: [:download_sample_csv, :sample_csv_import]
   before_action :fetch_non_admins, only: [:index, :sample_import, :reset]
   before_action :ensure_valid_file, only: :user_csv_import
 
   def index
-    @csv_table = CSV.open(DATASHIFT_CSV_FILES[:sample_user_file], headers: true).read if File.exists? DATASHIFT_CSV_FILES[:sample_user_file]
+    @csv_table = CSV.open(DATASHIFT_CSV_FILES[:sample_user_file], headers: true).read
   end
 
   def reset
@@ -52,15 +51,8 @@ class Spree::Admin::UserImportsController < Spree::Admin::BaseController
       end
     end
 
-    def ensure_sample_file_exists
-      unless File.exists? DATASHIFT_CSV_FILES[:sample_user_file]
-        flash[:error] = Spree.t(:sample_file_not_present, scope: :datashift_import)
-        redirect_to admin_user_imports_path
-      end
-    end
-
     def fetch_non_admins
-      @non_admins = Spree::User.non_admins
+      @non_admins = Spree.user_class.non_admins
       @non_admin_user_count = @non_admins.count
     end
 

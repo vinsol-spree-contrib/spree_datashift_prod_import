@@ -2,7 +2,7 @@ module Spree
   class DataResetService
 
     def reset_users(users = [])
-      users = Spree::User.non_admins unless users.present?
+      users = Spree.user_class.non_admins unless users.present?
       users.destroy_all
     end
 
