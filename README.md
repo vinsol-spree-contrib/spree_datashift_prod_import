@@ -27,9 +27,7 @@ Installation
   bundle exec rails g spree_datashift_prod_import:install
   ```
 
-4. Create a folder with name `sample_csv` in your app's root directory and add sample files in it.
-
-5. Restart your server.
+4. Restart your server.
 
 Features
 --------
