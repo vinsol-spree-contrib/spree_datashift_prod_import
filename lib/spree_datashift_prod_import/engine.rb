@@ -4,6 +4,7 @@ module SpreeDatashiftProdImport
     require 'csv'
     require 'datashift'
     require 'datashift_spree'
+    require 'mechanize'
 
     isolate_namespace Spree
     engine_name 'spree_datashift_prod_import'
