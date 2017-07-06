@@ -20,8 +20,8 @@ class Spree::Admin::OrderImportsController < Spree::Admin::BaseController
 
   def sample_csv_import
     begin
-      loader = DataShift::SpreeEcom::ShopifyOrderLoader.new(Spree::Order, { verbose: true })
-      loader.perform_load(DATASHIFT_CSV_FILES[:sample_order_file])
+      loader = DataShift::SpreeEcom::ShopifyOrderLoader.new(DATASHIFT_CSV_FILES[:sample_order_file], { verbose: true })
+      loader.run
       flash[:success] = Spree.t(:successfull_import, scope: :datashift_import, resource: Spree::Order.name.demodulize)
     rescue => e
       flash[:error] = e.message
@@ -31,8 +31,8 @@ class Spree::Admin::OrderImportsController < Spree::Admin::BaseController
 
   def user_csv_import
     begin
-      loader = DataShift::SpreeEcom::ShopifyOrderLoader.new(Spree::Order, { verbose: true })
-      loader.perform_load(params[:csv_file].path)
+      loader = DataShift::SpreeEcom::ShopifyOrderLoader.new(params[:csv_file].path, { verbose: true })
+      loader.run
       flash[:success] = Spree.t(:successfull_import, scope: :datashift_import, resource: Spree::Order.name.demodulize)
     rescue => e
       flash[:error] = e.message

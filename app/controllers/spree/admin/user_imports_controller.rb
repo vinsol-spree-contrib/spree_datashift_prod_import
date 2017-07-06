@@ -22,10 +22,11 @@ class Spree::Admin::UserImportsController < Spree::Admin::BaseController
 
   def sample_csv_import
     begin
-      loader = DataShift::SpreeEcom::ShopifyCustomerLoader.new(nil, { verbose: true, address_type: params[:address_type] })
-      loader.perform_load(DATASHIFT_CSV_FILES[:sample_user_file])
+      loader = DataShift::SpreeEcom::ShopifyCustomerLoader.new(DATASHIFT_CSV_FILES[:sample_user_file], { verbose: true, address_type: params[:address_type] })
+      loader.run
       flash[:success] = Spree.t(:successfull_import, scope: :datashift_import, resource: Spree.user_class.name.demodulize)
     rescue => e
+      debugger
       flash[:error] = e.message
     end
     redirect_to admin_user_imports_path
@@ -33,8 +34,8 @@ class Spree::Admin::UserImportsController < Spree::Admin::BaseController
 
   def user_csv_import
     begin
-      loader = DataShift::SpreeEcom::ShopifyCustomerLoader.new(nil, { verbose: true, address_type: params[:address_type] })
-      loader.perform_load(params[:csv_file].path)
+      loader = DataShift::SpreeEcom::ShopifyCustomerLoader.new(params[:csv_file].path, { verbose: true, address_type: params[:address_type] })
+      loader.run
       flash[:success] = Spree.t(:successfull_import, scope: :datashift_import, resource: Spree.user_class.name.demodulize)
     rescue => e
       flash[:error] = e.message

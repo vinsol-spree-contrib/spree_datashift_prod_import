@@ -21,8 +21,8 @@ class Spree::Admin::ProductImportsController < Spree::Admin::BaseController
 
   def sample_csv_import
     begin
-      loader = DataShift::SpreeEcom::ProductLoader.new(nil, { verbose: true })
-      loader.perform_load(DATASHIFT_CSV_FILES[:sample_product_file], @options)
+      loader = DataShift::SpreeEcom::ProductLoader.new(DATASHIFT_CSV_FILES[:sample_product_file], @options)
+      loader.run
       flash[:success] = Spree.t(:successfull_import, scope: :datashift_import, resource: Spree::Product.name.demodulize)
     rescue => e
       flash[:error] = e.message
@@ -32,8 +32,8 @@ class Spree::Admin::ProductImportsController < Spree::Admin::BaseController
 
   def user_csv_import
     begin
-      loader = DataShift::SpreeEcom::ProductLoader.new(nil, { verbose: true })
-      loader.perform_load(params[:csv_file].path, @options)
+      loader = DataShift::SpreeEcom::ProductLoader.new(params[:csv_file].path, @options)
+      loader.run
       flash[:success] = Spree.t(:successfull_import, scope: :datashift_import, resource: Spree::Product.name.demodulize)
     rescue => e
       flash[:error] = e.message
