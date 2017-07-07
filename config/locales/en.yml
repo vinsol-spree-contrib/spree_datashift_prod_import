@@ -4,6 +4,7 @@ en:
       reset_message:
         users: All Non-Admins destroyed successfully.
         orders: These orders - "%{order_numbers}" destroyed successfully.
+        exception_detail: Got Exception while destroying data - "%{exception_detail}"
       sample_file_not_present: No Sample File Found.
       successfull_import: "%{resource} data imported successfully. Please Verify!"
       file_invalid_error: Please upload a valid file and try again.
@@ -26,7 +27,7 @@ en:
           clear_product_data: clear product related data
           clear_products: Clear Products
           import_products: Import Products
-          product_reset_confirmation: This will destroy all the products and their associated data from the system. Are you sure?
+          product_reset_confirmation: This will destroy all the products and their associated data like images, shipping categories, stock location, variants etc from the system. Are you sure?
           verify_products: Verify Product (%{product_count})
           import_with_sample_data: Import with Sample data
           transform_to_spree_format: Transform to Spree Format
@@ -37,7 +38,7 @@ en:
           import_with_bill_address: "Import with Sample File using Bill Address"
           import_with_ship_address: "Import with Sample File using Ship Address"
           verify_non_admins: Verify Non-Admin Users (%{non_admin_count})
-          user_reset_confirmation: This will destroy all the users from the system. Are you sure?
+          user_reset_confirmation: This will destroy all the users and their associated orders from the system. Are you sure?
           clear_user_data: clear user related data
       downlaod_sample_file: Download Sample File
       downlaod_shopify_file: Download Shopify Export File

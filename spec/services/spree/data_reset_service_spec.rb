@@ -28,6 +28,21 @@ describe Spree::DataResetService do
 
   end
 
+  describe 'reset users with orders' do
+    let!(:user_1) { create(:user) }
+    let!(:admin) { create(:admin_user) }
+    let!(:order_1) { create(:order, user_id: user_1.id) }
+    let!(:order_2) { create(:order, user_id: admin.id) }
+
+    before { reset_object.reset_users_with_orders }
+
+    it { expect(Spree::User.all).to_not include(user_1) }
+    it { expect(Spree::User.all).to include(admin) }
+    it { expect(Spree::Order.all).to_not include(order_1) }
+    it { expect(Spree::Order.all).to include(order_2) }
+
+  end
+
   describe 'reset_products' do
     let!(:product) { create(:product) }
     let!(:variant) { create(:variant, product_id: product.id) }
