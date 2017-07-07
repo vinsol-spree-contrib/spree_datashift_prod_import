@@ -7,7 +7,7 @@
   <%= button_link_to Spree.t(:downlaod_sample_file, scope: :datashift_import), download_sample_csv_admin_user_imports_path, { class: "btn-success", icon: 'download-alt' } %>
 <% end %>
 
-<% if(@non_admin_user_count > 0) %>
+<% if @non_admin_user_count > 0 && Rails.env.development? %>
   <div class="row">
     <strong>Note - </strong>In development mode, For better verifcation we recommend you to first <%= link_to Spree.t(:clear_user_data, scope: [:datashift_import, :import_headings, :user_import_headings]), reset_admin_user_imports_path, method: :delete, data: { confirm: Spree.t(:user_reset_confirmation, scope: [:datashift_import, :import_headings, :user_import_headings]) } %> and then try to <%= link_to Spree.t(:import_users, scope: [:datashift_import, :import_headings, :user_import_headings]), sample_import_admin_user_imports_path %>.
   </div>
