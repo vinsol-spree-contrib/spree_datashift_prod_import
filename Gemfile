@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
 ### SPREE EXTENSIONS ###
-gem 'spree', '~> 3.1.0'
-gem 'spree_auth_devise', '~> 3.1'
+gem 'spree', github: 'spree/spree', branch: '3-0-stable'
+gem 'spree_auth_devise', github: 'spree/spree_auth_devise', branch: '3-0-stable'
 
 ### RUBY GEMS ###
 gem 'datashift', github: 'vinsol-spree-contrib/datashift', branch: '0-16-stable'
