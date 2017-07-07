@@ -8,8 +8,7 @@ class Spree::Admin::UserImportsController < Spree::Admin::BaseController
   end
 
   def reset
-    Spree::DataResetService.new.reset_users(@non_admins)
-    flash[:success] = Spree.t(:users, scope: [:datashift_import, :reset_message])
+    flash[:success] = Spree::DataResetService.new.reset_users_with_orders(@non_admins)
     redirect_to admin_user_imports_path
   end
 
