@@ -46,7 +46,7 @@ describe Spree::Admin::UserImportsController, type: :controller do
   describe 'reset' do
 
     let(:data_reset_service_object) { Spree::DataResetService.new }
-    let(:reset_users) { double ActiveRecord::Relation }
+    let(:reset_message) { double('Reset Message') }
 
     def send_request
       spree_delete :reset
@@ -54,13 +54,13 @@ describe Spree::Admin::UserImportsController, type: :controller do
 
     before do
       allow(Spree::DataResetService).to receive(:new).and_return(data_reset_service_object)
-      allow(data_reset_service_object).to receive(:reset_users).and_return(reset_users)
+      allow(data_reset_service_object).to receive(:reset_users_with_orders).and_return(Spree.t(:users, scope: [:datashift_import, :reset_message]))
     end
 
     describe 'expects to receive' do
       after { send_request }
       it { expect(Spree::DataResetService).to receive(:new).and_return(data_reset_service_object) }
-      it { expect(data_reset_service_object).to receive(:reset_users).and_return(reset_users) }
+      it { expect(data_reset_service_object).to receive(:reset_users_with_orders).and_return(Spree.t(:users, scope: [:datashift_import, :reset_message])) }
     end
 
     describe 'response' do
