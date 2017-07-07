@@ -73,21 +73,20 @@ describe Spree::Admin::ProductImportsController, type: :controller do
     end
 
     before do
-      allow(controller).to receive(:send_file).with(DATASHIFT_CSV_FILES[:sample_product_file])
-      allow(controller).to receive(:render)
+      allow(controller).to receive(:send_file).with(DATASHIFT_CSV_FILES[:sample_product_file]) { controller.render body: nil }
     end
 
     describe 'response' do
       before { send_request }
-      it { expect(response).to have_http_status(:ok) }
+      it { expect(response).to have_http_status(200) }
     end
 
   end
 
   describe 'sample_csv_import' do
 
-    let(:loader_options) { { verbose: true } }
-    let(:product_loader) { DataShift::SpreeEcom::ProductLoader.new(nil, loader_options) }
+    let(:loader_options) { { mandatory: PRODUCT_MANDATORY_FIELDS } }
+    let(:product_loader) { double('Porduct Loader') }
 
     def send_request(params = {})
       spree_post :sample_csv_import, params
@@ -95,14 +94,14 @@ describe Spree::Admin::ProductImportsController, type: :controller do
 
     context 'when import is successfull' do
       before do
-        allow(DataShift::SpreeEcom::ProductLoader).to receive(:new).with(nil, loader_options).and_return(product_loader)
-        allow(product_loader).to receive(:perform_load)
+        allow(DataShift::SpreeEcom::ProductLoader).to receive(:new).with(DATASHIFT_CSV_FILES[:sample_product_file], loader_options).and_return(product_loader)
+        allow(product_loader).to receive(:run)
       end
 
       describe 'expects to receive' do
         after { send_request }
-        it { expect(DataShift::SpreeEcom::ProductLoader).to receive(:new).with(nil, loader_options).and_return(product_loader) }
-        it { expect(product_loader).to receive(:perform_load) }
+        it { expect(DataShift::SpreeEcom::ProductLoader).to receive(:new).with(DATASHIFT_CSV_FILES[:sample_product_file], loader_options).and_return(product_loader) }
+        it { expect(product_loader).to receive(:run) }
       end
 
       describe 'response' do
@@ -115,14 +114,14 @@ describe Spree::Admin::ProductImportsController, type: :controller do
 
     context 'when exception is raised while importing' do
       before do
-        allow(DataShift::SpreeEcom::ProductLoader).to receive(:new).with(nil, loader_options).and_return(product_loader)
-        allow(product_loader).to receive(:perform_load).and_raise(StandardError, 'something went wrong')
+        allow(DataShift::SpreeEcom::ProductLoader).to receive(:new).with(DATASHIFT_CSV_FILES[:sample_product_file], loader_options).and_return(product_loader)
+        allow(product_loader).to receive(:run).and_raise(StandardError, 'something went wrong')
       end
 
       describe 'expects to receive' do
         after { send_request }
-        it { expect(DataShift::SpreeEcom::ProductLoader).to receive(:new).with(nil, loader_options).and_return(product_loader) }
-        it { expect(product_loader).to receive(:perform_load).and_raise(StandardError, 'something went wrong') }
+        it { expect(DataShift::SpreeEcom::ProductLoader).to receive(:new).with(DATASHIFT_CSV_FILES[:sample_product_file], loader_options).and_return(product_loader) }
+        it { expect(product_loader).to receive(:run).and_raise(StandardError, 'something went wrong') }
       end
 
       describe 'response' do
@@ -138,8 +137,8 @@ describe Spree::Admin::ProductImportsController, type: :controller do
   describe 'user_csv_import' do
 
     let(:import_params) { { csv_file: Rack::Test::UploadedFile.new(DATASHIFT_CSV_FILES[:sample_product_file].to_s) }.with_indifferent_access }
-    let(:loader_options) { { verbose: true } }
-    let(:product_loader) { DataShift::SpreeEcom::ProductLoader.new(nil, loader_options) }
+    let(:loader_options) { { mandatory: PRODUCT_MANDATORY_FIELDS } }
+    let(:product_loader) { double('Porduct Loader') }
 
     def send_request(params = {})
       spree_post :user_csv_import, params
@@ -156,14 +155,14 @@ describe Spree::Admin::ProductImportsController, type: :controller do
 
     context 'when csv file present in params and import is successfull' do
       before do
-        allow(DataShift::SpreeEcom::ProductLoader).to receive(:new).with(nil, loader_options).and_return(product_loader)
-        allow(product_loader).to receive(:perform_load)
+        allow(DataShift::SpreeEcom::ProductLoader).to receive(:new).and_return(product_loader)
+        allow(product_loader).to receive(:run)
       end
 
       describe 'expects to receive' do
         after { send_request(import_params) }
-        it { expect(DataShift::SpreeEcom::ProductLoader).to receive(:new).with(nil, loader_options).and_return(product_loader) }
-        it { expect(product_loader).to receive(:perform_load) }
+        it { expect(DataShift::SpreeEcom::ProductLoader).to receive(:new).and_return(product_loader) }
+        it { expect(product_loader).to receive(:run) }
       end
 
       describe 'response' do
@@ -176,14 +175,14 @@ describe Spree::Admin::ProductImportsController, type: :controller do
 
     context 'when csv file present in params and import is unsuccessfull' do
       before do
-        allow(DataShift::SpreeEcom::ProductLoader).to receive(:new).with(nil, loader_options).and_return(product_loader)
-        allow(product_loader).to receive(:perform_load).and_raise(StandardError, 'something went wrong')
+        allow(DataShift::SpreeEcom::ProductLoader).to receive(:new).and_return(product_loader)
+        allow(product_loader).to receive(:run).and_raise(StandardError, 'something went wrong')
       end
 
       describe 'expects to receive' do
         after { send_request(import_params) }
-        it { expect(DataShift::SpreeEcom::ProductLoader).to receive(:new).with(nil, loader_options).and_return(product_loader) }
-        it { expect(product_loader).to receive(:perform_load).and_raise(StandardError, 'something went wrong') }
+        it { expect(DataShift::SpreeEcom::ProductLoader).to receive(:new).and_return(product_loader) }
+        it { expect(product_loader).to receive(:run).and_raise(StandardError, 'something went wrong') }
       end
 
       describe 'response' do
@@ -203,13 +202,12 @@ describe Spree::Admin::ProductImportsController, type: :controller do
     end
 
     before do
-      allow(controller).to receive(:send_file).with(DATASHIFT_CSV_FILES[:shopify_products_export_file])
-      allow(controller).to receive(:render)
+      allow(controller).to receive(:send_file).with(DATASHIFT_CSV_FILES[:shopify_products_export_file]) { controller.render body: nil }
     end
 
     describe 'response' do
       before { send_request }
-      it { expect(response).to have_http_status(:ok) }
+      it { expect(response).to have_http_status(200) }
     end
 
   end
@@ -217,7 +215,7 @@ describe Spree::Admin::ProductImportsController, type: :controller do
   describe 'shopify_csv_import' do
 
     let(:tranform_params) { { csv_file: Rack::Test::UploadedFile.new(DATASHIFT_CSV_FILES[:shopify_products_export_file].to_s) }.with_indifferent_access }
-    let(:loader_options) { { verbose: true } }
+    let(:loader_options) { { mandatory: PRODUCT_MANDATORY_FIELDS } }
     let(:transformer) { DataShift::SpreeEcom::ShopifyProductTransform.new(tranform_params[:csv_file].path) }
 
     def send_request(params = {})
@@ -235,7 +233,7 @@ describe Spree::Admin::ProductImportsController, type: :controller do
 
     context 'when csv file present in params and import is successfull' do
       before do
-        allow(DataShift::SpreeEcom::ShopifyProductTransform).to receive(:new).with(tranform_params[:csv_file].path).and_return(transformer)
+        allow(DataShift::SpreeEcom::ShopifyProductTransform).to receive(:new).and_return(transformer)
         allow(transformer).to receive(:to_csv)
         allow(controller).to receive(:send_file)
         allow(controller).to receive(:render)
@@ -243,25 +241,25 @@ describe Spree::Admin::ProductImportsController, type: :controller do
 
       describe 'expects to receive' do
         after { send_request(tranform_params) }
-        it { expect(DataShift::SpreeEcom::ShopifyProductTransform).to receive(:new).with(tranform_params[:csv_file].path).and_return(transformer) }
+        it { expect(DataShift::SpreeEcom::ShopifyProductTransform).to receive(:new).and_return(transformer) }
         it { expect(transformer).to receive(:to_csv) }
       end
 
       describe 'response' do
         before { send_request(tranform_params) }
-        it { expect(response).to have_http_status(200) }
+        it { expect(response).to have_http_status(204) }
       end
     end
 
     context 'when csv file present in params and import is unsuccessfull' do
       before do
-        allow(DataShift::SpreeEcom::ShopifyProductTransform).to receive(:new).with(tranform_params[:csv_file].path).and_return(transformer)
+        allow(DataShift::SpreeEcom::ShopifyProductTransform).to receive(:new).and_return(transformer)
         allow(transformer).to receive(:to_csv).and_raise(StandardError, 'something went wrong')
       end
 
       describe 'expects to receive' do
         after { send_request(tranform_params) }
-        it { expect(DataShift::SpreeEcom::ShopifyProductTransform).to receive(:new).with(tranform_params[:csv_file].path).and_return(transformer) }
+        it { expect(DataShift::SpreeEcom::ShopifyProductTransform).to receive(:new).and_return(transformer) }
         it { expect(transformer).to receive(:to_csv).and_raise(StandardError, 'something went wrong') }
       end
 

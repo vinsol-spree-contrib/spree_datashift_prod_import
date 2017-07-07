@@ -73,8 +73,7 @@ describe Spree::Admin::OrderImportsController, type: :controller do
     end
 
     before do
-      allow(controller).to receive(:send_file)
-      allow(controller).to receive(:render)
+      allow(controller).to receive(:send_file) { controller.render body: :nil }
     end
 
     describe 'response' do
@@ -86,7 +85,7 @@ describe Spree::Admin::OrderImportsController, type: :controller do
 
   describe 'sample_csv_import' do
 
-    let(:order_loader) { DataShift::SpreeEcom::ShopifyOrderLoader.new(Spree::Order) }
+    let(:order_loader) { double('order loader') }
 
     def send_request
       spree_post :sample_csv_import
@@ -94,14 +93,14 @@ describe Spree::Admin::OrderImportsController, type: :controller do
 
     context 'when import is successfull' do
       before do
-        allow(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).with(Spree::Order, { verbose: true }).and_return(order_loader)
-        allow(order_loader).to receive(:perform_load)
+        allow(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).with(DATASHIFT_CSV_FILES[:sample_order_file], { verbose: true }).and_return(order_loader)
+        allow(order_loader).to receive(:run)
       end
 
       describe 'expects to receive' do
         after { send_request }
-        it { expect(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).with(Spree::Order, { verbose: true }).and_return(order_loader) }
-        it { expect(order_loader).to receive(:perform_load) }
+        it { expect(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).with(DATASHIFT_CSV_FILES[:sample_order_file], { verbose: true }).and_return(order_loader) }
+        it { expect(order_loader).to receive(:run) }
       end
 
       describe 'response' do
@@ -114,14 +113,14 @@ describe Spree::Admin::OrderImportsController, type: :controller do
 
     context 'when exception is raised while importing' do
       before do
-        allow(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).with(Spree::Order, { verbose: true }).and_return(order_loader)
-        allow(order_loader).to receive(:perform_load).and_raise(StandardError, 'something went wrong')
+        allow(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).with(DATASHIFT_CSV_FILES[:sample_order_file], { verbose: true }).and_return(order_loader)
+        allow(order_loader).to receive(:run).and_raise(StandardError, 'something went wrong')
       end
 
       describe 'expects to receive' do
         after { send_request }
-        it { expect(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).with(Spree::Order, { verbose: true }).and_return(order_loader) }
-        it { expect(order_loader).to receive(:perform_load).and_raise(StandardError, 'something went wrong') }
+        it { expect(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).with(DATASHIFT_CSV_FILES[:sample_order_file], { verbose: true }).and_return(order_loader) }
+        it { expect(order_loader).to receive(:run).and_raise(StandardError, 'something went wrong') }
       end
 
       describe 'response' do
@@ -154,14 +153,14 @@ describe Spree::Admin::OrderImportsController, type: :controller do
 
     context 'when csv file present in params and import is successfull' do
       before do
-        allow(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).with(Spree::Order, { verbose: true }).and_return(order_loader)
-        allow(order_loader).to receive(:perform_load)
+        allow(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).and_return(order_loader)
+        allow(order_loader).to receive(:run)
       end
 
       describe 'expects to receive' do
         after { send_request(import_params) }
-        it { expect(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).with(Spree::Order, { verbose: true }).and_return(order_loader) }
-        it { expect(order_loader).to receive(:perform_load) }
+        it { expect(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).and_return(order_loader) }
+        it { expect(order_loader).to receive(:run) }
       end
 
       describe 'response' do
@@ -174,14 +173,14 @@ describe Spree::Admin::OrderImportsController, type: :controller do
 
     context 'when csv file present in params and import is unsuccessfull' do
       before do
-        allow(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).with(Spree::Order, { verbose: true }).and_return(order_loader)
-        allow(order_loader).to receive(:perform_load).and_raise(StandardError, 'something went wrong')
+        allow(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).and_return(order_loader)
+        allow(order_loader).to receive(:run).and_raise(StandardError, 'something went wrong')
       end
 
       describe 'expects to receive' do
         after { send_request(import_params) }
-        it { expect(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).with(Spree::Order, { verbose: true }).and_return(order_loader) }
-        it { expect(order_loader).to receive(:perform_load).and_raise(StandardError, 'something went wrong') }
+        it { expect(DataShift::SpreeEcom::ShopifyOrderLoader).to receive(:new).and_return(order_loader) }
+        it { expect(order_loader).to receive(:run).and_raise(StandardError, 'something went wrong') }
       end
 
       describe 'response' do

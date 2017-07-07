@@ -25,7 +25,6 @@ class Spree::Admin::UserImportsController < Spree::Admin::BaseController
       loader.run
       flash[:success] = Spree.t(:successfull_import, scope: :datashift_import, resource: Spree.user_class.name.demodulize)
     rescue => e
-      debugger
       flash[:error] = e.message
     end
     redirect_to admin_user_imports_path
