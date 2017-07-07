@@ -3,15 +3,17 @@
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:clear_products, scope: [:datashift_import, :import_headings, :product_import_headings]), reset_admin_product_imports_path, { class: "btn-success", icon: 'trash', method: :delete, data: { confirm: Spree.t(:product_reset_confirmation, scope: [:datashift_import, :import_headings, :product_import_headings]) } } %>
+  <%= button_link_to Spree.t(:clear_products, scope: [:datashift_import, :import_headings, :product_import_headings]), reset_admin_product_imports_path, { class: "btn-success", icon: 'trash', method: :delete, data: { confirm: Spree.t(:product_reset_confirmation, scope: [:datashift_import, :import_headings, :product_import_headings]) } } if Rails.env.development? %>
   <%= button_link_to Spree.t(:import_products, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_import_admin_product_imports_path, { class: "btn-success", icon: 'add' } %>
 <% end %>
 
-<div>
-  <strong>Note - </strong>In development mode, For better verifcation we recommend you to first <%= link_to Spree.t(:clear_product_data, scope: [:datashift_import, :import_headings, :product_import_headings]), reset_admin_product_imports_path, method: :delete, data: { confirm: Spree.t(:product_reset_confirmation, scope: [:datashift_import, :import_headings, :product_import_headings]) } %> and then try to <%= link_to Spree.t(:import_products, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_import_admin_product_imports_path %>.
-</div>
+<% if Rails.env.development? %>
+  <div>
+    <strong>Note - </strong>In development mode, For better verifcation we recommend you to first <%= link_to Spree.t(:clear_product_data, scope: [:datashift_import, :import_headings, :product_import_headings]), reset_admin_product_imports_path, method: :delete, data: { confirm: Spree.t(:product_reset_confirmation, scope: [:datashift_import, :import_headings, :product_import_headings]) } %> and then try to <%= link_to Spree.t(:import_products, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_import_admin_product_imports_path %>.
+  </div>
 
-<br><br>
+  <br><br>
+<% end %>
 
 <div>
   <%= link_to Spree.t(:verify_products, scope: [:datashift_import, :import_headings, :product_import_headings], product_count: Spree::Product.count), admin_products_path %>
