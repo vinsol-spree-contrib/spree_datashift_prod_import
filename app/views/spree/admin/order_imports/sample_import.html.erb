@@ -8,7 +8,7 @@
 <% end %>
 
 
-<% if(Spree::Order.count > 0) %>
+<% if Spree::Order.count > 0 && Rails.env.development? %>
   <div class="row">
     <strong>Note - </strong>In development mode, For better verifcation we recommend you to first <%= link_to Spree.t(:clear_order_data, scope: [:datashift_import, :import_headings, :order_import_headings]), reset_admin_order_imports_path, method: :delete, data: { confirm: Spree.t(:order_reset_confirmation, scope: [:datashift_import, :import_headings, :order_import_headings]) } %> and then try to <%= link_to Spree.t(:import_orders, scope: [:datashift_import, :import_headings, :order_import_headings]), sample_import_admin_order_imports_path %>.
   </div>
