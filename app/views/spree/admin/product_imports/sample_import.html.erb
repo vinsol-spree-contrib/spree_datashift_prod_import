@@ -4,42 +4,55 @@
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:downlaod_sample_file, scope: :datashift_import), download_sample_csv_admin_product_imports_path, { class: "btn-success", icon: 'download-alt' } %>
-  <%= button_link_to Spree.t(:downlaod_shopify_file, scope: :datashift_import), download_sample_shopify_export_csv_admin_product_imports_path, { class: "btn-success", icon: 'download-alt' } %>
+  <%= button_link_to Spree.t(:download_sample_file, scope: :datashift_import), download_sample_csv_admin_product_imports_path, { class: "btn-success", icon: 'download-alt' } %>
+  <%= button_link_to Spree.t(:download_shopify_file, scope: :datashift_import), download_sample_shopify_export_csv_admin_product_imports_path, { class: "btn-success", icon: 'download-alt' } %>
 <% end %>
 
-<% if Spree::Product.count > 0 && Rails.env.development? %>
+<% if Spree::Product.count > 0 && Spree::Config.allow_datashift_reset %>
   <div class="row">
-    <strong>Note - </strong>In development mode, For better verifcation we recommend you to first <%= link_to Spree.t(:clear_product_data, scope: [:datashift_import, :import_headings, :product_import_headings]), reset_admin_product_imports_path, method: :delete, data: { confirm: Spree.t(:product_reset_confirmation, scope: [:datashift_import, :import_headings, :product_import_headings]) } %> and then try to <%= link_to Spree.t(:import_products, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_import_admin_product_imports_path %>.
+    <strong>Note - </strong>In development mode, For better verification we recommend you to first <%= link_to Spree.t(:clear_product_data, scope: [:datashift_import, :import_headings, :product_import_headings]), reset_admin_product_imports_path, method: :delete, data: { confirm: Spree.t(:product_reset_confirmation, scope: [:datashift_import, :import_headings, :product_import_headings]) } %> and then try to <%= link_to Spree.t(:import_products, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_import_admin_product_imports_path %>.
   </div>
 <% end %>
 
 
 
 <div class="row">
-  <h3>Instructions</h3>
-  <div class='top-pading-20'>a) If you are importing using CSV file</div>
-  <%= render 'import_form' %>
-  <div class='top-pading-20'>b) If you are importing using sample data. </div>
-  <ol>
-    <li>Click on 'Import with Sample data' and verify the imported data.</li>
-    <li>You can also download the sample file and customized it according to your need and upload it again using STEP 'a'.</li>
-    <br>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="panel panel-default">
-          <div class="panel-heading">Sample Import</div>
-          <div class="panel-body">
-            <div>
-              <%= link_to Spree.t(:import_with_sample_data, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_csv_import_admin_product_imports_path, method: :post, data: { confirm: Spree.t(:are_you_sure) }, class: 'btn btn-default' %>
+  <h3 class='text-center'><b>Instructions</b></h3>
+  <div class="panel panel-default">
+    <div class="panel-heading">a) If you are importing using CSV file</div>
+    <%= render 'import_form' %>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">b) If you are importing using sample data.</div>
+
+    <div class="panel-body">
+      <div class='row'>
+        <div class="col-md-6">
+          <ol>
+            <li>Click on 'Import with Sample data' and verify the imported data.</li>
+            <li>You can also download the sample file and customized it according to your need and upload it again using STEP 'a'.</li>
+            <br>
+          </ol>
+        </div>
+
+        <div class="col-md-6">
+          <div class="panel panel-info">
+            <div class="panel-heading">Sample Import</div>
+            <div class="panel-body">
+              <div>
+                <%= link_to Spree.t(:import_with_sample_data, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_csv_import_admin_product_imports_path, method: :post, data: { confirm: Spree.t(:are_you_sure) }, class: 'btn btn-default' %>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </ol>
+  </div>
 
-  <div class='top-pading-20'>c) If you are importing using Shopify Export file</div>
-  <%= render 'transform_form' %>
+  <div class="panel panel-default">
+    <div class="panel-heading">c) If you are importing using Shopify Export file</div>
+    <%= render 'transform_form' %>
+  </div>
 
 </div>

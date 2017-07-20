@@ -3,54 +3,52 @@
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:clear_products, scope: [:datashift_import, :import_headings, :product_import_headings]), reset_admin_product_imports_path, { class: "btn-success", icon: 'trash', method: :delete, data: { confirm: Spree.t(:product_reset_confirmation, scope: [:datashift_import, :import_headings, :product_import_headings]) } } if Rails.env.development? %>
+  <%= button_link_to Spree.t(:clear_products, scope: [:datashift_import, :import_headings, :product_import_headings]), reset_admin_product_imports_path, { class: "btn-success", icon: 'trash', method: :delete, data: { confirm: Spree.t(:product_reset_confirmation, scope: [:datashift_import, :import_headings, :product_import_headings]) } } if Spree::Config.allow_datashift_reset %>
   <%= button_link_to Spree.t(:import_products, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_import_admin_product_imports_path, { class: "btn-success", icon: 'add' } %>
 <% end %>
 
-<% if Rails.env.development? %>
+<% if Spree::Config.allow_datashift_reset %>
   <div>
-    <strong>Note - </strong>In development mode, For better verifcation we recommend you to first <%= link_to Spree.t(:clear_product_data, scope: [:datashift_import, :import_headings, :product_import_headings]), reset_admin_product_imports_path, method: :delete, data: { confirm: Spree.t(:product_reset_confirmation, scope: [:datashift_import, :import_headings, :product_import_headings]) } %> and then try to <%= link_to Spree.t(:import_products, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_import_admin_product_imports_path %>.
+    <strong>Note - </strong>In development mode, For better verification we recommend you to first <%= link_to Spree.t(:clear_product_data, scope: [:datashift_import, :import_headings, :product_import_headings]), reset_admin_product_imports_path, method: :delete, data: { confirm: Spree.t(:product_reset_confirmation, scope: [:datashift_import, :import_headings, :product_import_headings]) } %> and then try to <%= link_to Spree.t(:import_products, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_import_admin_product_imports_path %>.
   </div>
 
   <br><br>
 <% end %>
 
-<div>
-  <%= link_to Spree.t(:verify_products, scope: [:datashift_import, :import_headings, :product_import_headings], product_count: Spree::Product.count), admin_products_path %>
-</div>
-
-<div>
-  <%= link_to "Verify Option Types", admin_option_types_path %>
-</div>
-
-<div>
-  <%= link_to "Verify Option Values", admin_option_types_path %>
-</div>
-
-<div>
-  <%= link_to "Verify Shipping Categories", admin_shipping_categories_path %>
-</div>
-
-<div>
-  <%= link_to "Verify Tax Categories", admin_tax_categories_path %>
-</div>
-
-<div>
-  <%= link_to "Verify Stock Locations", admin_stock_locations_path %>
-</div>
-
-<div>
-  <%= link_to "Verify Product Properties", admin_properties_path %>
-</div>
-
-<div>
-  <%= link_to "Verify Taxonomies", admin_taxonomies_path %>
-</div>
-
-<div>
-  <%= link_to "Verify Taxons", admin_taxons_path %>
-</div>
-
+<% content_for :sidebar do %>
+  <ul class="nav nav-pills nav-stacked" data-hook="admin_product_tabs">
+    <%= content_tag :li, class: 'active' do %>
+      <%= link_to Spree.t(:details), 'javascript:void(0)' %>
+    <% end %>
+    <%= content_tag :li do %>
+      <%= link_to Spree.t(:verify_products, scope: [:datashift_import, :import_headings, :product_import_headings], product_count: Spree::Product.count), admin_products_path %>
+    <% end %>
+    <%= content_tag :li do %>
+      <%= link_to Spree.t(:verify, resource: Spree::OptionType.name.demodulize.titleize.pluralize, scope: [:datashift_import, :import_headings, :product_import_headings]), admin_option_types_path %>
+    <% end %>
+    <%= content_tag :li do %>
+      <%= link_to Spree.t(:verify, resource: Spree::OptionValue.name.demodulize.titleize.pluralize, scope: [:datashift_import, :import_headings, :product_import_headings]), admin_option_types_path %>
+    <% end %>
+    <%= content_tag :li do %>
+      <%= link_to Spree.t(:verify, resource: Spree::ShippingCategory.name.demodulize.titleize.pluralize, scope: [:datashift_import, :import_headings, :product_import_headings]), admin_shipping_categories_path %>
+    <% end %>
+    <%= content_tag :li do %>
+      <%= link_to Spree.t(:verify, resource: Spree::TaxCategory.name.demodulize.titleize.pluralize, scope: [:datashift_import, :import_headings, :product_import_headings]), admin_tax_categories_path %>
+    <% end %>
+    <%= content_tag :li do %>
+      <%= link_to Spree.t(:verify, resource: Spree::StockLocation.name.demodulize.titleize.pluralize, scope: [:datashift_import, :import_headings, :product_import_headings]), admin_stock_locations_path %>
+    <% end %>
+    <%= content_tag :li do %>
+      <%= link_to Spree.t(:verify, resource: Spree::ProductProperty.name.demodulize.titleize.pluralize, scope: [:datashift_import, :import_headings, :product_import_headings]), admin_properties_path %>
+    <% end %>
+    <%= content_tag :li do %>
+      <%= link_to Spree.t(:verify, resource: Spree::Taxonomy.name.demodulize.titleize.pluralize, scope: [:datashift_import, :import_headings, :product_import_headings]), admin_taxonomies_path %>
+    <% end %>
+    <%= content_tag :li do %>
+      <%= link_to Spree.t(:verify, resource: Spree::Taxon.name.demodulize.titleize.pluralize, scope: [:datashift_import, :import_headings, :product_import_headings]), admin_taxons_path %>
+    <% end %>
+  </ul>
+<% end %>
 
 <% if @csv_table %>
   <h3 class="text-center">Sample CSV Data</h3>
