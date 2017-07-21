@@ -1,26 +1,27 @@
-<h1>Product Import Demo using <a href="https://github.com/autotelik/datashift_spree" target="_blank">datashift_spree</a></h1>
+<% content_for :page_title do %>
+  <%= Spree.t(:product_import, scope: [:datashift_import, :import_headings, :product_import_headings]) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:clear_products, scope: [:datashift_import, :import_headings, :product_import_headings]), reset_admin_product_imports_path, { class: "btn-success", icon: 'trash', method: :delete, data: { confirm: Spree.t(:product_reset_confirmation, scope: [:datashift_import, :import_headings, :product_import_headings]) } } if Spree::Config.allow_datashift_reset %>
+  <%= button_link_to Spree.t(:import_products, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_import_admin_product_imports_path, { class: "btn-success", icon: 'add' } %>
+<% end %>
+
+<% if Spree::Config.allow_datashift_reset %>
+  <div>
+    <strong>Note - </strong>In development mode, For better verification we recommend you to first <%= link_to Spree.t(:clear_product_data, scope: [:datashift_import, :import_headings, :product_import_headings]), reset_admin_product_imports_path, method: :delete, data: { confirm: Spree.t(:product_reset_confirmation, scope: [:datashift_import, :import_headings, :product_import_headings]) } %> and then try to <%= link_to Spree.t(:import_products, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_import_admin_product_imports_path %>.
+  </div>
+
+  <br><br>
+<% end %>
 
 
-As its a demo, <%= link_to "Clear Product Related Data", reset_admin_product_imports_path %> to have blank slate
-and verify the data you get after <%= link_to "Sample Import", sample_import_admin_product_imports_path %>
+<% content_for :sidebar do %>
+  <%= render 'product_import_sidebar_tabs' %>
+<% end %>
 
-<br />
-<br />
-<%= link_to "Verify #{Spree::Product.count} Products and their Variants, Images,Stocks, Properties", admin_products_path %>
-<br />
-<br />
-<%= link_to "Verify Option Types", admin_option_types_path %>
-<br />
-<%= link_to "Verify Option Values", admin_option_types_path %>
-<br />
-<%= link_to "Verify Shipping Categories", admin_shipping_categories_path %>
-<br />
-<%= link_to "Verify Tax Categories", admin_tax_categories_path %>
-<br />
-<%= link_to "Verify Stock Movements", admin_stock_locations_path %>
-<br />
-<%= link_to "Verify Product Properties", admin_properties_path %>
-<br />
-<%= link_to "Verify Taxonomies", admin_taxonomies_path %>
-<br />
-<%= link_to "Verify Taxons", admin_taxons_path %>
+<% if @csv_table %>
+  <h3 class="text-center">Sample CSV Data</h3>
+  <%= render 'spree/admin/shared/sample_csv_data', csv_table: @csv_table %>
+<% end %>
+

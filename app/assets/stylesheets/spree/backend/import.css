@@ -1,0 +1,12 @@
+.top-pading-20 {
+  padding-top: 10px;
+}
+
+.table-responsive {
+  background: 
+    radial-gradient(farthest-side at 0% 50%, rgba(0,0,0,.2), rgba(0,0,0,0)),
+    radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,.2), rgba(0,0,0,0)) 100% 0;
+  background-repeat: no-repeat;
+  background-size: 10px 100%;
+  margin-bottom: 15px;
+}

@@ -1,0 +1,5 @@
+<ul id="sidebar-import" class="collapse nav nav-pills nav-stacked" data-hook="admin_import_sub_tabs">
+  <%= tab :orders, url: '/admin/order_imports', match_path: '/order_imports' if can? :admin, Spree::Admin::OrderImportsController %>
+  <%= tab :products, url: '/admin/product_imports', match_path: '/product_imports' if can? :admin, Spree::Admin::ProductImportsController %>
+  <%= tab :users, url: '/admin/user_imports', match_path: '/user_imports' if can? :admin, Spree::Admin::UserImportsController  %>
+</ul>

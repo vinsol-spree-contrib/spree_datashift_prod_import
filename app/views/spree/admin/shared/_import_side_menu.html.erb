@@ -1,0 +1,5 @@
+<% if can?(:admin, Spree::Admin::OrderImportsController) || can?(:admin, Spree::Admin::ProductImportsController) || can?(:admin, Spree::Admin::UserImportsController) %>
+  <ul class="nav nav-sidebar">
+    <%= main_menu_tree Spree.t(:imports, scope: :datashift_import), icon: "download-alt", sub_menu: "import", url: "#sidebar-import" %>
+  </ul>
+<% end %>

@@ -1,0 +1,35 @@
+<div class="panel-body">
+  <div class="row">
+    <div class="col-md-6">
+      <ol>
+        <li>Choose a Shopify Export CSV file by clicking 'choose file' button.</li>
+        <li>Click on 'Transform to Spree Format'.</li>
+        <li>Now upload the transformed CSV file using STEP 'a'</li>
+        <li>You can also download 'Sample Shopify Export file' and customize it and process is using STEP 'a' and 'c'</li>
+        <br>
+      </ol>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-info">
+        <div class="panel-heading">Transform Shopify CSV file</div>
+        <div class="panel-body">
+          <%= form_tag(shopify_csv_import_admin_product_imports_path, multipart: true, class: 'form-horizontal') do %>
+            <fieldset>
+              <div class="form-group">
+                <%= label_tag :csv_file, Spree.t(:filename), class: 'col-md-2 control-label', required: true   %>
+                <div class="col-md-10">
+                  <%= file_field_tag :csv_file, accept: 'text/csv' %>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-10 col-md-offset-1">
+                  <%= submit_tag Spree.t(:transform_to_spree_format, scope: [:datashift_import, :import_headings, :product_import_headings]), class: 'btn btn-primary' %>
+                </div>
+              </div>
+            </fieldset>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<div class="panel-body">
+  <div class="row">
+    <div class="col-md-6">
+      <ol>
+        <li>Choose a CSV by clicking 'choose file' button.</li>
+        <li>Make sure your CSV has headers as present in sample CSV.</li>
+        <li>Click on Import.</li>
+        <br>
+      </ol>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-info">
+        <div class="panel-heading">Import CSV</div>
+        <div class="panel-body">
+          <%= form_tag(user_csv_import_admin_order_imports_path, multipart: true, class: 'form-horizontal') do %>
+            <fieldset>
+              <div class="form-group">
+                <%= label_tag :csv_file, Spree.t(:filename), class: 'col-md-2 control-label', required: true   %>
+                <div class="col-md-10">
+                  <%= file_field_tag :csv_file, accept: 'text/csv' %>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-10 col-md-offset-1">
+                  <%= submit_tag Spree.t(:import, scope: :datashift_import), class: 'btn btn-primary' %>
+                </div>
+              </div>
+            </fieldset>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

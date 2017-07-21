@@ -1,61 +1,58 @@
-<h1>Sample Import</h1>
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:product_import, scope: [:datashift_import, :import_headings, :product_import_headings]), admin_product_imports_url %> /
+  <%= Spree.t(:import, scope: :datashift_import) %>
+<% end %>
 
-<% if(Spree::Product.count > 0) %>
-  <h2>It seems you have product data already,
-  <%= link_to "Clear Product Related Data", reset_admin_product_imports_path %>
-  for better verification, After all Purpose is to check the capabilities and not test :P
-  </h2>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:download_sample_file, scope: :datashift_import), download_sample_csv_admin_product_imports_path, { class: "btn-success", icon: 'download-alt' } %>
+  <%= button_link_to Spree.t(:download_shopify_file, scope: :datashift_import), download_sample_shopify_export_csv_admin_product_imports_path, { class: "btn-success", icon: 'download-alt' } %>
+<% end %>
+
+<% if Spree::Product.count > 0 && Spree::Config.allow_datashift_reset %>
+  <div class="row">
+    <strong>Note - </strong>In development mode, For better verification we recommend you to first <%= link_to Spree.t(:clear_product_data, scope: [:datashift_import, :import_headings, :product_import_headings]), reset_admin_product_imports_path, method: :delete, data: { confirm: Spree.t(:product_reset_confirmation, scope: [:datashift_import, :import_headings, :product_import_headings]) } %> and then try to <%= link_to Spree.t(:import_products, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_import_admin_product_imports_path %>.
+  </div>
 <% end %>
 
 
-<h2>Upload Shopify Product Export File and Get Import Compatible CSV to be used</h2>
-<%= link_to "Download Sample Shopify Export File", download_sample_shopify_export_csv_admin_product_imports_path %>
 
-<br/>
+<div class="row">
+  <h3 class='text-center'><b>Instructions</b></h3>
+  <div class="panel panel-default">
+    <div class="panel-heading">a) If you are importing using CSV file</div>
+    <%= render 'import_form' %>
+  </div>
 
-try with your export file, if you have Shopify Account
+  <div class="panel panel-default">
+    <div class="panel-heading">b) If you are importing using sample data.</div>
 
-<br />
+    <div class="panel-body">
+      <div class='row'>
+        <div class="col-md-6">
+          <ol>
+            <li>Click on 'Import with Sample data' and verify the imported data.</li>
+            <li>You can also download the sample file and customized it according to your need and upload it again using STEP 'a'.</li>
+            <br>
+          </ol>
+        </div>
 
-<br/>
-<% if @shopify_upload_error %>
-  Error: <%= @shopify_upload_error %>
-<% end %>
-<%= form_tag(shopify_csv_import_admin_product_imports_path, multipart: true) do %>
-  <%= file_field_tag :csv_file, accept: 'text/csv' %>
-  <%= submit_tag "Import" %>
-<% end %>
-<br />
-<br />
+        <div class="col-md-6">
+          <div class="panel panel-info">
+            <div class="panel-heading">Sample Import</div>
+            <div class="panel-body">
+              <div>
+                <%= link_to Spree.t(:import_with_sample_data, scope: [:datashift_import, :import_headings, :product_import_headings]), sample_csv_import_admin_product_imports_path, method: :post, data: { confirm: Spree.t(:are_you_sure) }, class: 'btn btn-default' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<%= link_to "Download Sample File", download_sample_csv_admin_product_imports_path %> and make edits and see customised Data :)
+  <div class="panel panel-default">
+    <div class="panel-heading">c) If you are importing using Shopify Export file</div>
+    <%= render 'transform_form' %>
+  </div>
 
-<br />
-<br />
-
-<%= form_tag(user_csv_import_admin_product_imports_path, multipart: true) do %>
-  <%= file_field_tag :csv_file, accept: 'text/csv' %>
-  <%= submit_tag "Import" %>
-<% end %>
-
-<br />
-<br />
-
-<h4><%= link_to "Start Import with Sample File", sample_csv_import_admin_product_imports_path, method: :post %></h4>
-
-<br />
-
-<table border="0" cellspacing="5" cellpadding="5">
-  <tr>
-  <% @csv_table.headers.each do |header| %>
-    <th><%= header %></th>
-  <% end %>
-  </tr>
-  <% @csv_table.each do |row| %>
-    <tr>
-    <% row.each do |element| %>
-      <td><%= element[1] %></td>
-    <% end %>
-    </tr>
-  <% end %>
-</table>
+</div>

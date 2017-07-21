@@ -53,6 +53,8 @@ RSpec.configure do |config|
   # spree_get :index
   config.include Spree::TestingSupport::ControllerRequests, type: :controller
 
+  config.include Devise::TestHelpers, type: :controller
+
   # == Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
