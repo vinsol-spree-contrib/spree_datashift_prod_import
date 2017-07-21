@@ -15,24 +15,25 @@ en:
       import: Import
       import_headings:
         order_import_headings:
-          order_import: Order Import
+          order_import: Orders
           clear_order_data: clear order related data
           order_reset_confirmation: This will destroy all the orders and their associated data from the system. Are you sure?
           import_orders: Import Orders
-          verify_orders: Verify Orders (%{order_count})
+          verify: Verify %{resource} (%{order_count})
           import_with_sample_data: Import with Sample data
           clear_orders: Clear Orders
         product_import_headings:
-          product_import: Product Import
+          product_import: Products
           clear_product_data: clear product related data
           clear_products: Clear Products
           import_products: Import Products
           product_reset_confirmation: This will destroy all the products and their associated data like images, shipping categories, stock location, variants etc from the system. Are you sure?
           verify_products: Verify Product (%{product_count})
+          verify: Verify %{resource}
           import_with_sample_data: Import with Sample data
           transform_to_spree_format: Transform to Spree Format
         user_import_headings:
-          user_import: User Import
+          user_import: Users
           import_users: Import Users
           clear_users: Clear Users
           import_with_bill_address: "Import with Sample File using Bill Address"
@@ -40,5 +41,5 @@ en:
           verify_non_admins: Verify Non-Admin Users (%{non_admin_count})
           user_reset_confirmation: This will destroy all the users and their associated orders from the system. Are you sure?
           clear_user_data: clear user related data
-      downlaod_sample_file: Download Sample File
-      downlaod_shopify_file: Download Shopify Export File
+      download_sample_file: Download Sample File
+      download_shopify_file: Download Shopify Export File

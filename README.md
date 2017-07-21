@@ -1,7 +1,7 @@
 SpreeDatashiftProdImport
 ========================
 
-This spree extension allows admin to import Products, Variants, Users, Orders etc using a CSV or .xls file including all associations.
+This spree extension allows admin to import Products, Variants, Users, Orders etc using a CSV file including all associations. This also supports import of Products through a .xls file.
 
 Installation
 ------------
@@ -10,7 +10,7 @@ Installation
 
   ```ruby
   gem 'spree_datashift_prod_import', github: 'vinsol-spree-contrib/spree_datashift_prod_import', branch: <spree-version-compatible>
-  gem 'datashift_spree', github: 'vinsol-spree-contrib/datashift_spree', branch: 'bug-fixes'
+  gem 'datashift_spree', github: 'vinsol-spree-contrib/datashift_spree', branch: '3-1-stable'
   gem 'datashift', github: 'vinsol-spree-contrib/datashift', branch: '0-16-stable'
   ```
   *The `branch` option is important:* it must match the version of Spree you're using. For example, use `3-1-stable` if you're using Spree `3-1-stable` or any `3.1.x` version.

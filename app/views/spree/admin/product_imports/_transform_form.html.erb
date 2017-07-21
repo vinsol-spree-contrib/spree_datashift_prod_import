@@ -1,13 +1,17 @@
-<ol>
-  <li>Choose a Shopify Export CSV file by clicking 'choose file' button.</li>
-  <li>Click on 'Transform to Spree Format'.</li>
-  <li>Now upload the transormed CSV file using STEP 'a'</li>
-  <li>You can also download 'Sample Shopify Export file' and customize it and prodcess is using STEP 'a' and 'c'</li>
-  <br>
+<div class="panel-body">
   <div class="row">
     <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-heading">Tranform Shopify CSV file</div>
+      <ol>
+        <li>Choose a Shopify Export CSV file by clicking 'choose file' button.</li>
+        <li>Click on 'Transform to Spree Format'.</li>
+        <li>Now upload the transformed CSV file using STEP 'a'</li>
+        <li>You can also download 'Sample Shopify Export file' and customize it and process is using STEP 'a' and 'c'</li>
+        <br>
+      </ol>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-info">
+        <div class="panel-heading">Transform Shopify CSV file</div>
         <div class="panel-body">
           <%= form_tag(shopify_csv_import_admin_product_imports_path, multipart: true, class: 'form-horizontal') do %>
             <fieldset>
@@ -28,4 +32,4 @@
       </div>
     </div>
   </div>
-</ol>
+</div>
