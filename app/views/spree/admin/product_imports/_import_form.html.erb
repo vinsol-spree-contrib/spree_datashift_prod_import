@@ -1,11 +1,15 @@
-<ol>
-  <li>Choose a CSV by clicking 'choose file' button.</li>
-  <li>Make sure your CSV has headers as present in sample CSV.</li>
-  <li>Click on Import.</li>
-  <br>
+<div class="panel-body">
   <div class="row">
     <div class="col-md-6">
-      <div class="panel panel-default">
+      <ol>
+        <li>Choose a CSV by clicking 'choose file' button.</li>
+        <li>Make sure your CSV has headers as present in sample CSV.</li>
+        <li>Click on Import.</li>
+        <br>
+      </ol>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-info">
         <div class="panel-heading">Import CSV</div>
         <div class="panel-body">
           <%= form_tag(user_csv_import_admin_product_imports_path, multipart: true, class: 'form-horizontal') do %>
@@ -27,4 +31,4 @@
       </div>
     </div>
   </div>
-</ol>
+</div>

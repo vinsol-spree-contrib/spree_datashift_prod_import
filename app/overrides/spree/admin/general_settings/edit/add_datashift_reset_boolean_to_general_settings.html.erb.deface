@@ -1,0 +1,23 @@
+<!-- insert_before '[data-hook=buttons]' -->
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h1 class="panel-title">
+            <%= Spree.t(:datashift_reset)%>
+          </h1>
+        </div>
+
+        <div class="panel-body">
+          <div class="form-group">
+            <%= label_tag :allow_datashift_reset do %>
+              <%= hidden_field_tag :allow_datashift_reset, 0 %>
+              <%= check_box_tag :allow_datashift_reset, 1, Spree::Config.allow_datashift_reset %>
+              <%= Spree.t(:allow_datashift_reset) %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
